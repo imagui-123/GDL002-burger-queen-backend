@@ -6,6 +6,7 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "jest --verbose --testPathIgnorePatterns e2e",
+    "nodemon": "nodemon index.js",
     "start": "node index.js",
     "e2e": "jest --verbose --testPathPattern e2e --globalSetup ./e2e/globalSetup --globalTeardown ./e2e/globalTeardown --runInBand",
     "deploy": "now -e MONGO_URL=@mongo-url -e JWT_SECRET=@jwt-secret -e ADMIN_EMAIL=@admin-email -e ADMIN_PASSWORD=@admin-password"
@@ -17,6 +18,7 @@
     "mongoose": "^5.5.2",
     "mongoose-paginate": "^5.0.3",
     "node-fetch": "^2.3.0",
+    "nodemon": "^1.19.1",
     "tree-kill": "^1.2.1"
   },
   "devDependencies": {
