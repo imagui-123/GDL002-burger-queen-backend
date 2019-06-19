@@ -12,7 +12,7 @@ const app = express();
 
 
 // Conectar aplicación a MongoDB
-mongoose.connect(mongoUrl, { useNewUrlParser: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true });
 
 
 app.set('config', config);
