@@ -34,3 +34,8 @@ routes(app, (err) => {
 
   app.listen(port, () => console.log(`App listening on port ${port}`));
 });
+
+
+
+app.use(require('./routes/products'));
+app.use(require('./routes/orders'));
