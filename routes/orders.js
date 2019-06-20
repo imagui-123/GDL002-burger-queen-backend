@@ -9,7 +9,7 @@ const app = express();
 // get a list of orders from the db
 app.get('/order', (req, res, next) => {
   Order.find()
-    .select('product quantity _id statusOrder')
+    .select('product quantity _id statusOrder createdAt')
     .sort([['createdAt', -1]])
     .exec()
     .then((docs) => {
@@ -20,6 +20,7 @@ app.get('/order', (req, res, next) => {
           product: doc.product,
           quantity: doc.quantity,
           statusOrder: doc.statusOrder,
+          createdAt: doc.createdAt,
         })),
       });
     })
