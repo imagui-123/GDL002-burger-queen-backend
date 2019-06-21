@@ -34,10 +34,10 @@ app.get('/order', (req, res, next) => {
 // add a new order to the db
 app.post('/order', (req, res, next) => {
   //  Product.findById(req.body.productId)
-  const _id = req.body.productId;
-  console.log(`id${ _id}`);
+  const id = req.body.productId;
+  console.log(`id${ id}`);
   
-  Product.findOne(_id)
+  Product.findOne(id)
     .then((product) => {
       if (!product) {
         return res.status(404).json({
