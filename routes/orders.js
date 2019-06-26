@@ -6,7 +6,9 @@ const {
   requireAdmin,
 } = require('../middleware/auth');
 
-const app = express();
+// const app = express();
+
+module.exports=(app, next) =>{
 
 app.get('/order', requireAdmin, (req, res) => {
   Order.find({})
@@ -69,4 +71,4 @@ app.delete('/order/:id', requireAuth, (req, res, next) => {
     }).catch(next);
 });
 
-module.exports = app;
+}

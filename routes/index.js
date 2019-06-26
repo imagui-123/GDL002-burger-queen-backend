@@ -1,7 +1,7 @@
 const auth = require('./auth');
 const users = require('./users');
 const products = require('./products');
-const orders = require('./users');
+const orders = require('./orders');
 
 
 const root = (app, next) => {

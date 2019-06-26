@@ -10,11 +10,18 @@ const {
   isAdmin,
 } = require('../middleware/auth');
 
+// module.exports = (app, next, test) => {
+//   app.get('/products', (request, response) => {
+//     response.json({ hola: "hola" });
+//   });
+//   typeof next === "function" ? next() : test();
+// }
 
-module.exports = (app, next) => {
 
-// get a list of products from the db
+module.exports = (app, next, secondNext) => {
+  // get a list of products from the db
   app.get('/products', requireAdmin, (req, res) => {
+    console.log('products');
     Product.find()
       .select('name price _id')
       .exec()
@@ -102,9 +109,7 @@ module.exports = (app, next) => {
             res.send(product);
           });
       }).catch(next);
-  
   });
-
 
   // delete a product from the db
   app.delete('/products/:id', requireAdmin, (req, res, next) => {
@@ -112,4 +117,6 @@ module.exports = (app, next) => {
       res.send(product);
     }).catch(next);
   });
+  return typeof next === 'function' ? next() : secondNext();
+
 };

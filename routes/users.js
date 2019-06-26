@@ -156,7 +156,5 @@ module.exports = (app, next) => {
       .then(doc => resp.json(omitPrivateProps(doc)))
       .catch(next);
   });
-
-
   initAdminUser(app, next);
 };
