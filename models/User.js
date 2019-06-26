@@ -1,9 +1,11 @@
+/* eslint-disable func-names */
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
 
 const UserSchema = new mongoose.Schema({
+
   email: {
     type: String,
     unique: true,

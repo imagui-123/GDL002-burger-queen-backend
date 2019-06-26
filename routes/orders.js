@@ -1,89 +1,71 @@
 const express = require('express');
-const mongoose = require('mongoose');
 
 const Order = require('../models/Order');
-const Product = require('../models/Product');
+const {
+  requireAuth,
+  requireAdmin,
+} = require('../middleware/auth');
 
 const app = express();
 
-// get a list of orders from the db
-app.get('/order', (req, res, next) => {
-  Order.find()
-    .select('product quantity _id statusOrder createdAt')
+app.get('/order', requireAdmin, (req, res) => {
+  Order.find({})
     .sort([['createdAt', -1]])
+    .populate('product User')
+    .then((Order) => {
+      res.send(Order);
+    });
+});
+
+
+app.get('/order/:orderId', requireAuth, (req, res) => {
+  Order.findById(req.params.orderId)
     .exec()
-    .then((docs) => {
-      res.status(200).json({
-        count: docs.length,
-        orders: docs.map(doc => ({
-          _id: doc._id,
-          product: doc.product,
-          quantity: doc.quantity,
-          statusOrder: doc.statusOrder,
-          createdAt: doc.createdAt,
-        })),
-      });
+    .then((doc) => {
+      if (doc) {
+        res.status(200).json({
+          order: doc,
+        });
+      } else {
+        res.status(401)
+          .json({ message: 'No valid entry found for order id' });
+      }
     })
     .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+      res.status(500).json({ error: err });
     });
 });
 
 // add a new order to the db
-app.post('/order', (req, res, next) => {
-  //  Product.findById(req.body.productId)
-  const id = req.body.productId;
-  console.log(`id${ id}`);
-  
-  Product.findOne(id)
-    .then((product) => {
-      if (!product) {
-        return res.status(404).json({
-          message: 'Product not found',
-          
-        });
-      }
-      console.log(req.body.productId)
-      const order = new Order({
-        _id: mongoose.Types.ObjectId(),
-        quantity: req.body.quantity,
-        product: req.body.productId,
-      });
-      return order.save();
+app.post('/order', requireAuth, (req, res, next) => {
+  Order.create(req.body)
+    .then((order) => {
+      res.send(order);
     })
-    .then((result) => {
-      res.status(201).json({
-        message: 'Order stored',
-        createdOrder: {
-          _id: result._id,
-          product: result.product,
-          quantity: result.quantity,
-        },
-      });
-    })
-    .catch(err => {
-      res.status(500).json({
-          error: err,
-      });
-  });
+    .catch(next);
 });
 
-//update an order in the db
-app.put('/order/:id', (req, res, next) => {
-  Order.findByIdAndUpdate({_id: req.params.id}, req.body).then(() => {
-    Order.findOne({_id: req.params.id}).then((order) =>{
+
+// update an order in the db
+app.put('/order/:id', requireAuth, (req, res, next) => {
+  Order.findByIdAndUpdate({ _id: req.params.id }, req.body).then(() => {
+    Order.findOne({ _id: req.params.id }).then((order) => {
       res.send(order);
     });
   }).catch(next);
 });
 
-//delete an order from the db
-app.delete('/order/:id', (req, res, next) => {
-  Order.findByIdAndRemove({_id: req.params.id})
-    .then((order) =>{
-      res.send(order);
+// delete an order from the db
+app.delete('/order/:id', requireAuth, (req, res, next) => {
+  Order.findByIdAndRemove({ _id: req.params.id })
+    .then((doc) => {
+      if (doc) {
+        res.status(201)
+          .json({ message: 'Order deleted' });
+      } else {
+        res.status(401)
+          .json({ message: 'No valid entry' });
+      }
     }).catch(next);
 });
 

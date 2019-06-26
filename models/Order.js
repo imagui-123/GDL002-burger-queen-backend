@@ -1,25 +1,33 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 // const Product = require('./Product');
+// let statusType={
+//   values: ['pending','preparing', 'delivering', 'delivered'],
+//   message: '{Value} no es válido',
+// }
 
 const OrderSchema = new mongoose.Schema({
   // _id: mongoose.Schema.Types.ObjectId,
-  product: {
+  product: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
-  },
-  quantity: {
+  }],
+  quantity: [{
     type: Number,
     default: 1,
-  },
-  statusOrder: {
+  }],
+  status: {
     type: String,
-    enum: ['Pending', 'Preparing', 'Delivering', 'Delivered'],
-    default: 'Pending',
+    enum: ['pending', 'preparing', 'delivering', 'delivered'],
+    default: 'pending',
   },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 

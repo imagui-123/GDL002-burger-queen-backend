@@ -117,7 +117,7 @@ module.exports = (app, next) => {
   ));
 
 
-  app.post('/users', (req, resp, next) => {
+  app.post('/users', requireAuth, (req, resp, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
