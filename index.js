@@ -36,5 +36,3 @@ routes(app, (err) => {
 });
 
 
-app.use(require('./routes/products'));
-app.use(require('./routes/orders'));

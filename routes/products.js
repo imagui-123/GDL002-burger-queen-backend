@@ -12,10 +12,10 @@ const {
 
 // module.exports = (app, next, test) => {
 //   app.get('/products', (request, response) => {
-//     response.json({ hola: "hola" });
+//     response.json({ hola: 'hola' });
 //   });
-//   typeof next === "function" ? next() : test();
-// }
+//   typeof next === 'function' ? next() : test();
+// };
 
 
 module.exports = (app, next, secondNext) => {
@@ -43,7 +43,7 @@ module.exports = (app, next, secondNext) => {
       });
   });
 
-  // add a new product to the db
+ // add a new product to the db
   app.post('/products', requireAdmin, (req, res, next) => {
     if (!isAdmin(req)) {
       res.status(403).json({
@@ -117,6 +117,6 @@ module.exports = (app, next, secondNext) => {
       res.send(product);
     }).catch(next);
   });
-  return typeof next === 'function' ? next() : secondNext();
 
+  return typeof next === 'function' ? next() : secondNext();
 };
